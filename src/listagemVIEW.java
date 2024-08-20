@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -43,17 +44,26 @@ public class listagemVIEW extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        listaProdutos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID", "Nome", "Valor", "Status"
-            }
-        ));
+        String[] colunas = {"ID", "NOME", "VALOR","STATUS"};
+
+        DefaultTableModel tabelaProduto = new DefaultTableModel(colunas, 0);
+        ProdutosDAO produtosdao = new ProdutosDAO();
+
+        List<ProdutosDTO> produtos = produtosdao.listarProdutos();
+
+        for (int i = 0; i < produtos.size(); i++){
+            ProdutosDTO produtoAtual = produtos.get(i);
+            String[] linha ={
+                String.valueOf(produtoAtual.getId()),
+                produtoAtual.getNome(),
+                String.valueOf(produtoAtual.getValor()),
+                produtoAtual.getStatus()
+            };
+
+            tabelaProduto.addRow(linha);
+
+        }
+        listaProdutos.setModel(tabelaProduto);
         jScrollPane1.setViewportView(listaProdutos);
 
         jLabel1.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
