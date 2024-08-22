@@ -1,3 +1,7 @@
+
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,6 +18,7 @@ public class vendasVIEW extends javax.swing.JFrame {
      */
     public vendasVIEW() {
         initComponents();
+        
     }
 
     /**
@@ -28,7 +33,6 @@ public class vendasVIEW extends javax.swing.JFrame {
         jFrame1 = new javax.swing.JFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         listaVendido = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -45,20 +49,25 @@ public class vendasVIEW extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        listaVendido.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID", "NOME", "VALOR", "STATUS"
-            }
-        ));
-        jScrollPane1.setViewportView(listaVendido);
+        String[] colunas = {"ID", "NOME", "VALOR","STATUS"};
+        DefaultTableModel tabelaProduto = new DefaultTableModel(colunas, 0);
+        ProdutosDAO produtosdao = new ProdutosDAO();
 
-        jButton1.setText("Voltar");
+        List<ProdutosDTO> produtos = produtosdao.listarProdutosVendidos();
+
+        for (int i = 0; i < produtos.size(); i++){
+            ProdutosDTO produtoAtual = produtos.get(i);
+            String[] linha ={
+                String.valueOf(produtoAtual.getId()),
+                produtoAtual.getNome(),
+                String.valueOf(produtoAtual.getValor()),
+                produtoAtual.getStatus()
+            };
+
+            tabelaProduto.addRow(linha);
+        }
+        listaVendido.setModel(tabelaProduto);
+        jScrollPane1.setViewportView(listaVendido);
 
         jLabel1.setToolTipText("");
 
@@ -72,15 +81,12 @@ public class vendasVIEW extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(111, 111, 111)
-                            .addComponent(jLabel2)
-                            .addGap(46, 46, 46)
-                            .addComponent(jLabel1))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(336, 336, 336)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(111, 111, 111)
+                        .addComponent(jLabel2)
+                        .addGap(46, 46, 46)
+                        .addComponent(jLabel1)
+                        .addGap(35, 35, 35)))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -95,9 +101,7 @@ public class vendasVIEW extends javax.swing.JFrame {
                         .addComponent(jLabel2)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -139,7 +143,6 @@ public class vendasVIEW extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
